@@ -1,0 +1,13 @@
+**target/
+**.classpath
+**.project
+**.settings/
+**data/
+**bashrc
+**bin/
+**~
+**resources/
+**webapp/
+**persistence.xml
+**persistence.xml~
+
