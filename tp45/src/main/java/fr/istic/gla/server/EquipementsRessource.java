@@ -5,6 +5,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -12,40 +19,59 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import fr.istic.gla.shared.Person;
+import fr.istic.gla.shared.Equipements;
 
 /*
  * This class is an example of services class
  */
 
-@Path("/Persons")
+@Path("/Equipementss")
 public class EquipementsRessource {
 
-    private List<Person> people = new ArrayList<Person>();
-
-    	
+	private EntityManager manager;
+	 
+	
     public EquipementsRessource() {
-        for (int i = 0; i < 20; i++) {
-            people.add(new Person());
-        }
+         EntityManagerFactory factory = Persistence
+				.createEntityManagerFactory("example");
+		manager = factory.createEntityManager();
     }
 
-    @GET
+ 
+    @GET @Path("createEquipements/{name}/{lastname}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public Collection<Person> list() {
-        return people;
+    public Long createEquipements(){
+
+    Equipements p = new Equipements();
+
+    EntityTransaction tx = manager.getTransaction();
+    tx.begin();
+    manager.persist(p);
+    tx.commit();
+
+    return p.getId();
+    }
+    
+    @GET @Path("Equipements/{name}")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public List<Equipements> getEquipements(@PathParam("name") String name){
+    CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
+    CriteriaQuery<Equipements> query = criteriaBuilder.createQuery(Equipements.class);
+    Root<Equipements> from = query.from(Equipements.class);
+    query.select(from).where(from.get("name").in(name));
+    return manager.createQuery(query).getResultList();
     }
     
     @GET @Path("search/{id}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public Person findById(@PathParam("id") String arg0) {
-        return people.get(Integer.parseInt(arg0));
+    public Equipements findById(@PathParam("id") String arg0) {
+        return null;
     }
 
     @DELETE @Path("delete/{id}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public Person deleteById(@PathParam("id") String arg0) {
-        return people.remove(Integer.parseInt(arg0));
+    public Equipements deleteById(@PathParam("id") String arg0) {
+        return null;
     }
 
     

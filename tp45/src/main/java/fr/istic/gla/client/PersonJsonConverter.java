@@ -8,6 +8,7 @@ import com.google.web.bindery.autobean.shared.AutoBeanUtils;
 import fr.istic.gla.shared.Book;
 import fr.istic.gla.shared.BookItf;
 import fr.istic.gla.shared.Person;
+import fr.istic.gla.shared.PersonItf;
 
 public class PersonJsonConverter {
 
@@ -21,23 +22,23 @@ public class PersonJsonConverter {
 	  fr.istic.gla.shared.MyFactory factory = GWT.create(fr.istic.gla.shared.MyFactory.class);
 	  // In non-GWT code, use AutoBeanFactorySource.create(MyFactory.class);
 
-	  public Person makePerson() {
+	  public PersonItf makePerson() {
 	    // Construct the AutoBean
-	    AutoBean<Person> person = factory.person();
+	    AutoBean<PersonItf> person = factory.person();
 
 	    // Return the Book interface shim
 	    return person.as();
 	  }
 
-	  String serializeToJson(Person person) {
+	  String serializeToJson(PersonItf person) {
 	    // Retrieve the AutoBean controller
-	    AutoBean<Person> bean = AutoBeanUtils.getAutoBean(person);
+	    AutoBean<PersonItf> bean = AutoBeanUtils.getAutoBean(person);
 
 	    return AutoBeanCodex.encode(bean).getPayload();
 	  }
 
-	  Person deserializeFromJson(String json) {
-	    AutoBean<Person> bean = AutoBeanCodex.decode(factory, Person.class, json);
+	  PersonItf deserializeFromJson(String json) {
+	    AutoBean<PersonItf> bean = AutoBeanCodex.decode(factory, PersonItf.class, json);
 	    return bean.as();
 	  }
 
