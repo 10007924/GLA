@@ -8,13 +8,12 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import org.hibernate.criterion.CriteriaQuery;
-
-import fr.istic.gla.shared.Equipements;
-import fr.istic.gla.shared.Home;
-import fr.istic.gla.shared.Person;
+import fr.istic.tpjpa.domain.Equipements;
+import fr.istic.tpjpa.domain.Home;
+import fr.istic.tpjpa.domain.Person;
 
 public class JpaTest {
 
@@ -111,15 +110,14 @@ public class JpaTest {
 	}
 	
 	private static void TheEnd(){
+		
 		CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
-		// assuming a is an Integer  
-		// if returning multiple fields, look into using a Tuple 
-//		    or specifying the return type as an Object or Object[]
-		javax.persistence.criteria.CriteriaQuery<Equipements> query = criteriaBuilder.createQuery(Equipements.class);
-		Root<Home> from = query.from(Home.class);
-		query.multiselect(from.get("id")).where(from.get("id").in(1, 2, 3, 4));
+		CriteriaQuery<Person> query = criteriaBuilder.createQuery(Person.class);
+		Root<Person> from = query.from(Person.class);
+		query.select(from).where(from.get("name").in("John"));
+		manager.createQuery(query).getResultList();//résultat
+		
 
-		System.out.println(query.getGroupList());
 		
 	}
 	// mail dépot git @   erwan.daubert@inria.fr
